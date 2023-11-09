@@ -8,11 +8,7 @@
 export default defineNuxtConfig({
   preset: 'node-server',
 
-  modules: [
-    '@nuxtjs/tailwindcss',
-    'nuxt-headlessui',
-    'nuxt-gtag',
-  ],
+  modules: ['@nuxtjs/tailwindcss', 'nuxt-headlessui', 'nuxt-gtag'],
 
   gtag: {
     id: 'G-M1KERXTK1H', // TODO: Add your google analytics 4 tag here
@@ -22,7 +18,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      yourEnv: process.env.YOUR_ENV,
+      yourEnv: 'https://api.creavity.pl',
     },
   },
 
@@ -60,8 +56,14 @@ export default defineNuxtConfig({
   },
 
   build: {
-    extend (config, ctx) {
+    extend(config, ctx) {
       config.resolve.symlinks = false;
+    },
+
+    babel: {
+      plugins: [
+        ['@babel/plugin-transform-template-literals', { quoteStyle: 'double' }],
+      ],
     },
   },
 
