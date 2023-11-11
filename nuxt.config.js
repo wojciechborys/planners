@@ -5,10 +5,17 @@
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 // eslint-disable-next-line no-undef
+import { createPinia } from 'pinia';
+import { userToken } from './src/stores/store';
+
 export default defineNuxtConfig({
   preset: 'node-server',
-
-  modules: ['@nuxtjs/tailwindcss', 'nuxt-headlessui', 'nuxt-gtag'],
+  modules: [
+    '@nuxtjs/tailwindcss',
+    'nuxt-headlessui',
+    'nuxt-gtag',
+    '@pinia/nuxt',
+  ],
 
   gtag: {
     id: 'G-M1KERXTK1H', // TODO: Add your google analytics 4 tag here
@@ -17,8 +24,11 @@ export default defineNuxtConfig({
   srcDir: './src',
 
   runtimeConfig: {
+    apiSecret: process.env.NUXT_API_SECRET,
+
     public: {
-      yourEnv: 'https://api.creavity.pl',
+      yourEnv: process.env.NUXT_API_BASE_URL,
+      apiPublic: process.env.NUXT_API_PUBLIC,
     },
   },
 

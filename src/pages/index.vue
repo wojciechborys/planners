@@ -1,22 +1,24 @@
 <template>
-  <div
-    class="container justify-center"
-    v-if="products && products.length"
-  ></div>
+  <main>
+    <div class="container mx-auto">
+      <ProductsList />
+    </div>
+  </main>
 </template>
 
 <script>
 import { useHead } from '#app';
 import { definePageMeta } from '#imports';
-import { onMounted, ref } from 'vue'; // Dodaj ref
+import ProductsList from '../components/commons/ProductsList.vue';
 
 export default {
+  components: {
+    ProductsList,
+  },
   setup() {
-    const config = useRuntimeConfig();
-    const products = ref([]); // Zadeklaruj products jako ref
-
     definePageMeta({
       layout: 'default',
+      middleware: ['auth'],
     });
 
     useHead({
@@ -31,14 +33,6 @@ export default {
         },
       ],
     });
-
-    onMounted(() => {
-      getNewestProducts();
-    });
-
-    return {
-      products,
-    };
   },
 };
 </script>

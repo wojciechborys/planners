@@ -7,20 +7,21 @@
 </template>
 
 <script>
-import { ref } from 'vue';
 import NavHeader from '../components/NavHeader.vue';
 import NavFooter from '../components/NavFooter.vue';
+import { userToken } from '@/stores/store';
 export default {
   components: {
     NavHeader,
     NavFooter,
   },
-  setup() {
-    const theme = ref(null);
 
-    return {
-      theme,
-    };
+  setup() {
+    if (process.client) {
+      const global = userToken();
+      const token = localStorage.getItem('auth_token');
+      global.setToken(token);
+    }
   },
 };
 </script>

@@ -9,31 +9,34 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { userToken } from '@/stores/store';
 
 const config = useRuntimeConfig();
 const userName = ref('');
 const userEmail = ref('');
-function logout() {
-  localStorage.removeItem('authToken');
-  navigateTo('/login');
-}
-onMounted(async () => {
-  // Poniżej znajdziesz przykładowy kod do zalogowania się przez API WooCommerce.
-  // const consumerKey = 'ck_ddfa72b96e991cce77628fd2c06ad21317c84688';
-  // const consumerSecret = 'cs_a24b110fb3c2b276e1d581ef5dda30a22c9699a4';
-  // const baseUrl = config.public.yourEnv;
+const global = userToken();
+const token = global.token;
 
+definePageMeta({
+  layout: 'default',
+  middleware: ['auth'],
+});
+
+function logout() {
+  localStorage.removeItem('auth_token');
+  global.setToken('');
+  navigateTo('/login?status=logged_out');
+}
+
+onMounted(async () => {
+  const baseUrl = config.public.yourEnv;
   try {
-    const token = localStorage.getItem('authToken');
-    const userResponse = await axios.get(
-      'https://api.creavity.pl/wp-json/wp/v2/users/me',
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    const user = userResponse.data; // Pobierz dane z odpowiedzi
+    const userResponse = await axios.get(`${baseUrl}/wp-json/wp/v2/users/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const user = userResponse.data;
     userName.value = user.name;
   } catch (error) {
     console.error('Błąd logowania:', error);

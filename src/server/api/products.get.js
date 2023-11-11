@@ -1,13 +1,15 @@
 import axios from 'axios';
 
-async function fetchNewestProducts () {
+async function fetchBestsellerProducts() {
+  const config = useRuntimeConfig();
+
   try {
     const apiConfig = {
       method: 'get',
       url: `${config.public.yourEnv}/wp-json/wc/v3/products`,
       params: {
-        consumer_key: 'ck_ddfa72b96e991cce77628fd2c06ad21317c84688',
-        consumer_secret: 'cs_a24b110fb3c2b276e1d581ef5dda30a22c9699a4',
+        consumer_key: config.public.apiPublic,
+        consumer_secret: config.apiSecret,
       },
     };
 
@@ -17,3 +19,5 @@ async function fetchNewestProducts () {
     console.error(error);
   }
 }
+
+export { fetchBestsellerProducts };

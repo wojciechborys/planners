@@ -1,3 +1,46 @@
+<script setup>
+import { ref } from 'vue';
+import axios from 'axios';
+import InfoError from '../components/commons/baneners/InfoError.vue';
+const components = {
+  InfoError,
+};
+// const config = useRuntimeConfig();
+const formData = ref({
+  login: 'admin',
+  password: '/lWOg]K#F)C#L8',
+});
+
+const showError = ref(false);
+
+const handleSubmit = async () => {
+  // Poniżej znajdziesz przykładowy kod do zalogowania się przez API WooCommerce.
+  // const consumerKey = 'ck_ddfa72b96e991cce77628fd2c06ad21317c84688';
+  // const consumerSecret = 'cs_a24b110fb3c2b276e1d581ef5dda30a22c9699a4';
+  // const baseUrl = config.public.yourEnv;
+
+  try {
+    const response = await axios.post(
+      'https://api.creavity.pl/wp-json/jwt-auth/v1/token',
+      {
+        username: formData.value.login,
+        password: formData.value.password,
+      }
+    );
+    const token = response.data.token;
+
+    localStorage.setItem('authToken', token);
+
+    await navigateTo('/account');
+  } catch (error) {
+    console.error('Błąd logowania:', error);
+    console.log('test');
+    showError.value = true;
+    throw error;
+  }
+};
+</script>
+
 <template>
   <div class="container mx-auto">
     <form class="w-1/2 mx-auto my-36" @submit.prevent="handleSubmit">
@@ -55,45 +98,3 @@
     </form>
   </div>
 </template>
-
-<script setup>
-import { ref } from 'vue';
-import axios from 'axios';
-import InfoError from '../components/commons/baneners/InfoError.vue';
-import { userToken } from '@/stores/store';
-
-const components = {
-  InfoError,
-};
-const showError = ref(false);
-const global = userToken();
-const config = useRuntimeConfig();
-definePageMeta({
-  layout: 'default',
-  middleware: ['auth'],
-});
-
-const formData = ref({
-  login: 'admin',
-  password: '/lWOg]K#F)C#L8',
-});
-
-const handleSubmit = async () => {
-  const baseUrl = config.public.yourEnv;
-  try {
-    const response = await axios.post(`${baseUrl}/wp-json/jwt-auth/v1/token`, {
-      username: formData.value.login,
-      password: formData.value.password,
-    });
-
-    const token = response.data.token;
-    localStorage.setItem('auth_token', token);
-    global.setToken(token);
-    await navigateTo('/account');
-  } catch (error) {
-    console.error('Błąd logowania:', error);
-    showError.value = true;
-    throw error;
-  }
-};
-</script>
