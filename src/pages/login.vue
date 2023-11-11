@@ -48,8 +48,11 @@
         {{ error }}
         <div class="col-span-2">
           <info-error v-if="showError">
-            Błąd logowania. Spróbuj jeszcze raz
+            Błąd logowania. Spróbuj jeszcze raz.
           </info-error>
+          <info-success v-if="isLoggedOut">
+            Wylogowałeś się ze swojego konta.
+          </info-success>
         </div>
       </div>
     </form>
@@ -60,14 +63,18 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import InfoError from '../components/commons/baneners/InfoError.vue';
+import InfoSuccess from '../components/commons/baneners/InfoSuccess.vue';
 import { userToken } from '@/stores/store';
 
 const components = {
   InfoError,
+  InfoSuccess,
 };
 const showError = ref(false);
 const global = userToken();
 const config = useRuntimeConfig();
+const route = useRoute();
+const isLoggedOut = route.query.status === 'logged_out';
 definePageMeta({
   layout: 'default',
   middleware: ['auth'],

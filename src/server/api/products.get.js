@@ -9,9 +9,10 @@ async function fetchBestsellerProducts() {
       url: `${config.public.yourEnv}/wp-json/wc/v3/products`,
       params: {
         consumer_key: config.public.apiPublic,
-        consumer_secret: config.apiSecret,
+        consumer_secret: config.public.apiSecret,
       },
     };
+    console.log(config);
 
     const response = await axios(apiConfig);
     return response.data;

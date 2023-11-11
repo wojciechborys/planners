@@ -24,11 +24,11 @@ export default defineNuxtConfig({
   srcDir: './src',
 
   runtimeConfig: {
-    apiSecret: process.env.NUXT_API_SECRET,
-
     public: {
       yourEnv: process.env.NUXT_API_BASE_URL,
       apiPublic: process.env.NUXT_API_PUBLIC,
+      // TODO create proxy, make this key private
+      apiSecret: process.env.NUXT_API_SECRET,
     },
   },
 

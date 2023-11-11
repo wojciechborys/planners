@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container mx-auto">
     <h1>Jesteś zalogowany</h1>
     <p>Użytkownik: {{ userName }}</p>
     <button @click="logout">Wyloguj się</button>

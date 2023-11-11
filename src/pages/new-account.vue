@@ -1,61 +1,27 @@
-<script setup>
-import { ref } from 'vue';
-import axios from 'axios';
-import InfoError from '../components/commons/baneners/InfoError.vue';
-const components = {
-  InfoError,
-};
-// const config = useRuntimeConfig();
-const formData = ref({
-  login: 'admin',
-  password: '/lWOg]K#F)C#L8',
-});
-
-const showError = ref(false);
-
-const handleSubmit = async () => {
-  // Poniżej znajdziesz przykładowy kod do zalogowania się przez API WooCommerce.
-  // const consumerKey = 'ck_ddfa72b96e991cce77628fd2c06ad21317c84688';
-  // const consumerSecret = 'cs_a24b110fb3c2b276e1d581ef5dda30a22c9699a4';
-  // const baseUrl = config.public.yourEnv;
-
-  try {
-    const response = await axios.post(
-      'https://api.creavity.pl/wp-json/jwt-auth/v1/token',
-      {
-        username: formData.value.login,
-        password: formData.value.password,
-      }
-    );
-    const token = response.data.token;
-
-    localStorage.setItem('authToken', token);
-
-    await navigateTo('/account');
-  } catch (error) {
-    console.error('Błąd logowania:', error);
-    console.log('test');
-    showError.value = true;
-    throw error;
-  }
-};
-</script>
-
 <template>
   <div class="container mx-auto">
     <form class="w-1/2 mx-auto my-36" @submit.prevent="handleSubmit">
       <div class="grid grid-cols-2 gap-4">
         <div class="col-span-2">
-          <h2 class="font-medium">Zaloguj się do swojego konta</h2>
+          <h2 class="font-medium">Załóż nowe konto</h2>
         </div>
         <div class="col-span-1">
           <input
-            v-model="formData.login"
+            v-model="formData.username"
             type="text"
             class="bg-gray-100 text-gray-800 font-medium py-2 px-4 rounded-l border-solid border-2 border-gray-300 w-full"
-            id="login"
-            placeholder="Login"
-            name="login"
+            placeholder="Nazwa użytkownika"
+            name="username"
+            required
+          />
+        </div>
+        <div class="col-span-1">
+          <input
+            v-model="formData.email"
+            type="email"
+            class="bg-gray-100 text-gray-800 font-medium py-2 px-4 rounded-l border-solid border-2 border-gray-300 w-full"
+            placeholder="Adres email"
+            name="email"
             required
           />
         </div>
@@ -64,7 +30,6 @@ const handleSubmit = async () => {
             v-model="formData.password"
             type="password"
             class="bg-gray-100 text-gray-800 font-medium py-2 px-4 rounded-l border-solid border-2 border-gray-300 w-full"
-            id="password"
             placeholder="Hasło"
             name="password"
             required
@@ -72,29 +37,88 @@ const handleSubmit = async () => {
         </div>
         <div class="col-span-2">
           <p>
-            Zapomniałeś hasła?
-            <nuxt-link to="/reset-password">Zresetuj hasło</nuxt-link>
-          </p>
-          <p>
-            Nie masz konta?
-            <nuxt-link to="/new-account">Załóż konto</nuxt-link>
+            Masz już konto?
+            <nuxt-link to="/login">Zaloguj się</nuxt-link>
           </p>
         </div>
         <div class="col-span-2">
           <button
-            class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-l w-full"
+            class="bg-gray-200 hover-bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-l w-full"
             type="submit"
           >
-            Zaloguj się
+            Zarejestruj się
           </button>
         </div>
         {{ error }}
         <div class="col-span-2">
           <info-error v-if="showError">
-            Błąd logowania. Spróbuj jeszcze raz
+            Błąd rejestracji. Spróbuj jeszcze raz.
           </info-error>
+          <info-success v-if="isLoggedOut">
+            Wylogowałeś się ze swojego konta.
+          </info-success>
         </div>
       </div>
     </form>
   </div>
 </template>
+
+<script setup>
+import { ref } from 'vue';
+import axios from 'axios';
+import InfoError from '../components/commons/baneners/InfoError.vue';
+import InfoSuccess from '../components/commons/baneners/InfoSuccess.vue';
+import { userToken } from '@/stores/store';
+import { useRoute } from 'vue-router';
+
+const components = {
+  InfoError,
+  InfoSuccess,
+};
+const showError = ref(false);
+const global = userToken();
+const config = useRuntimeConfig();
+const route = useRoute();
+const isLoggedOut = route.query.status === 'logged_out';
+definePageMeta({
+  layout: 'default',
+  middleware: ['auth'],
+});
+
+const formData = ref({
+  username: '',
+  email: '',
+  password: '',
+});
+
+const handleSubmit = async () => {
+  const baseUrl = config.public.yourEnv;
+  try {
+    const apiConfig = {
+      method: 'post', // Zmieniamy metodę na POST
+      url: `${baseUrl}/wp-json/wc/v3/customers`,
+      data: {
+        username: formData.value.username,
+        email: formData.value.email,
+        password: formData.value.password,
+      },
+      params: {
+        consumer_key: config.public.apiPublic,
+        consumer_secret: config.public.apiSecret,
+      },
+    };
+
+    const response = await axios(apiConfig);
+    console.log(response);
+
+    const token = response.data.token;
+    localStorage.setItem('auth_token', token);
+    global.setToken(token);
+    await navigateTo('/account');
+  } catch (error) {
+    console.error('Błąd rejestracji:', error);
+    showError.value = true;
+    throw error;
+  }
+};
+</script>
