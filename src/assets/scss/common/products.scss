@@ -1,0 +1,33 @@
+.product-list {
+  &__wrapper {
+    display: flex;
+    gap: 15px;
+  }
+  &__single {
+    width: 25%;
+  }
+}
+
+.product-card {
+  &__content {
+    padding: 15px;
+    &--title {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    &--categories {
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.add-to-cart {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  background-color: white;
+  border-radius: 8px;
+  padding: 13px;
+  box-shadow: 0px 0px 10px 2px #eee;
+}

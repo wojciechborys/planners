@@ -21,7 +21,7 @@ const handleSubmit = async () => {
 
   try {
     const response = await axios.post(
-      'https://api.creavity.pl/wp-json/jwt-auth/v1/token',
+      'https://api.wojciechborys.pl/wp-json/jwt-auth/v1/token',
       {
         username: formData.value.login,
         password: formData.value.password,

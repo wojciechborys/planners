@@ -1,7 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { fetchBestsellerProducts } from '../../server/api/products.get.js';
-
+import ProductCard from './ProductCard.vue';
+const components = {
+  ProductCard,
+};
 const products = ref([]); // Dodaj definicję zmiennej products
 
 const fetchProducts = async () => {
@@ -15,8 +18,14 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1 class="md:text-xl mb-5 font-bold">Najnowsze produkty</h1>
-  <div v-for="product in products" :key="product.id">
-    {{ product.name }}
+  <h2>Najnowsze produkty</h2>
+  <div class="product-list__wrapper">
+    <div
+      class="product-list__single"
+      v-for="product in products"
+      :key="product.id"
+    >
+      <ProductCard :product="product" />
+    </div>
   </div>
 </template>

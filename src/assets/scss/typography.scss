@@ -1,0 +1,13 @@
+@mixin typography-scale($base-size, $scale-factor, $levels) {
+  @for $i from 1 through $levels {
+    $header-size: $base-size * ($scale-factor - 0.05 * $i);
+    h#{$i} {
+      font-size: $header-size;
+    }
+  }
+}
+
+// Przykład użycia mixinu
+body {
+  @include typography-scale(19px, 1.2, 6);
+}
