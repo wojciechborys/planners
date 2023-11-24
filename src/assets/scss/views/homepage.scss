@@ -1,0 +1,30 @@
+.hero {
+  &__slider {
+    height: 70vh !important;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+.blog {
+  &__first {
+    &--image {
+      background-size: cover;
+      height: 100%;
+      border-radius: 5px;
+      padding: 20px;
+    }
+  }
+
+  &__rest {
+    &--image {
+      background-size: cover;
+      min-height: 300px;
+      border-radius: 5px;
+      padding: 20px;
+    }
+  }
+}

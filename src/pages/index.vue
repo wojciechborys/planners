@@ -1,9 +1,8 @@
 <template>
   <main>
-    <div class="container mx-auto">
-      <HeroSlider />
-      <ProductsList />
-    </div>
+    <HeroSlider />
+    <ProductsList class="mt-28" />
+    <PostsList class="mt-28" />
   </main>
 </template>
 
@@ -12,10 +11,12 @@ import { useHead } from '#app';
 import { definePageMeta } from '#imports';
 import ProductsList from '../components/commons/ProductsList.vue';
 import HeroSlider from '../components/HeroSlider.vue';
+import PostsList from '../components/commons/PostsList.vue';
 export default {
   components: {
     ProductsList,
     HeroSlider,
+    PostsList,
   },
   setup() {
     definePageMeta({
