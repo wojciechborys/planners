@@ -49,7 +49,6 @@ export default {
           if (field.photo) {
             const imageId = field.photo;
             const imageUrl = await getImageUrl(imageId);
-            console.log(imageUrl.source_url);
             field.imageUrl = imageUrl.source_url;
           }
         }

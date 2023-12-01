@@ -12,7 +12,6 @@ async function fetchBestsellerProducts() {
         consumer_secret: config.public.apiSecret,
       },
     };
-    console.log(config);
 
     const response = await axios(apiConfig);
     return response.data;

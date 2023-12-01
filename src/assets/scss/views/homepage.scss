@@ -28,3 +28,23 @@
     }
   }
 }
+
+.about {
+  .col-span-1 {
+    position: relative;
+  }
+  &__photo {
+    padding-left: 70px;
+    &--small {
+      position: absolute;
+      bottom: -90px;
+      left: -90px;
+      width: 250px;
+    }
+  }
+
+  &__description {
+    display: flex;
+    align-items: center;
+  }
+}

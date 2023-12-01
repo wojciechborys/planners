@@ -8,7 +8,6 @@ async function fetchAcfFromHomepage() {
       method: 'get',
       url: `${config.public.yourEnv}/wp-json/wp/v2/pages/36`,
     };
-    console.log(config);
 
     const response = await axios(apiConfig);
     return response.data;

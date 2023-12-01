@@ -109,7 +109,6 @@ const handleSubmit = async () => {
     };
 
     const response = await axios(apiConfig);
-    console.log(response);
 
     const token = response.data.token;
     localStorage.setItem('auth_token', token);

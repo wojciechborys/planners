@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import axios from 'axios';
 
 export default {
@@ -67,7 +67,7 @@ export default {
       return 'https://placekitten.com/300/200';
     };
 
-    onMounted(() => {
+    onBeforeMount(() => {
       getLatestPosts();
     });
 
